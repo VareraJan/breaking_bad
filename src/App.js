@@ -1,41 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from'./App.module.css';
 import EpisodeList from './components/EpisodeList';
 
 function App() {
-  // console.log('render App');
+  console.log('render App');
   const [episodes, setEpisodes] = useState('')
   const [err, setErr] = useState({})
   const [loading, setLoading] = useState(false)
 
   const getEpisodesHandler = () => {
-    setErr({})
     setLoading(true)
-    fetch(process.env.REACT_APP_API_BREAKING_BAD)
-      .then(response => response.json())
-      .then(data => setEpisodes(data))
-      .catch(data => setErr({message: 'Ошибка загрузки эпизодов', error: data}))
-      .finally(setLoading(false))
+    setErr({})
+
+    const getEpisode = async () => {
+      const response = await fetch(process.env.REACT_APP_API_BREAKING_BAD)
+      const data = await response.json()
+      if (response.ok){
+        setEpisodes(data)
+        setLoading(false)
+      } else {
+        setErr({message: 'Ошибка загрузки эпизодов', error: data})
+        setLoading(false)
+      }
+    }
+
+    getEpisode()
   }
-  console.log('Errors', episodes);
+  console.log('loading', loading);
+  
   return (
     <div className={styled.container}>
       <div>
         <h1>Список эпизодов Breaking Bad</h1>
         {loading 
           ?
-          <h3>Loading...</h3>
+          <span>Loading...</span>
           :
-          episodes 
+          err?.message 
             ?
-            <EpisodeList/>
+            <h3>{err.message}</h3>
             :
-            <button
-              className={styled.button}
-              onClick={getEpisodesHandler}
-            >
-              Загрузить эпизоды
-            </button>
+            episodes 
+              ?
+              <EpisodeList episodes={episodes}/>
+              :
+              <button
+                className={styled.button}
+                onClick={getEpisodesHandler}
+              >
+                Загрузить эпизоды
+              </button>
         }
       </div>
     </div>
