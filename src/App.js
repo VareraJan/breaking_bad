@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from'./App.module.css';
 import EpisodeList from './components/EpisodeList';
 
 function App() {
-  // console.log('render App');
   const [episodes, setEpisodes] = useState([])
   const [err, setErr] = useState({})
   const [loading, setLoading] = useState(false)
-  const [sorted, setSorted] = useState('')
 
   const getEpisodesHandler = () => {
     setLoading(true)
@@ -18,7 +16,6 @@ function App() {
       const data = await response.json()
       if (response.ok){
         setEpisodes(data)
-        setSorted(data)
         setLoading(false)
       } else {
         setErr({message: 'Ошибка загрузки эпизодов', error: data})
@@ -30,31 +27,26 @@ function App() {
   }
 
   const sortHandler = (sort) => {
-    setSorted(sort)
-  }
-  const deleteEpisodesHandler = (id) => {
-    console.log('deleteEpisodesHandler', id);
-    setEpisodes(prev => {
-      return episodes.filter(ep => ep.episode_id !== id)
-    })
-  }
-  
-  useEffect(() => {
-
     let sortEpisodes = JSON.parse(JSON.stringify(episodes));
 
-    if(sorted === 'up') {
+    if(sort === 'up') {
       sortEpisodes.sort((a, b) => {
         return a.episode_id - b.episode_id
       })
     }
-    if(sorted === 'down') {
+    if(sort === 'down') {
         sortEpisodes.sort((a, b) => {
         return b.episode_id - a.episode_id
       })
     }
     setEpisodes(sortEpisodes)
-    }, [sorted])
+  }
+  const deleteEpisodesHandler = (id) => {
+    setEpisodes(prev => {
+      return episodes.filter(ep => ep.episode_id !== id)
+    })
+  }
+  
 
   if (loading) {
     return (
