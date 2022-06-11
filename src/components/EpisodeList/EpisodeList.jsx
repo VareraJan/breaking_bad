@@ -1,7 +1,17 @@
+import { useDispatch } from 'react-redux';
+import { setEpisode } from '../../redux/actions/episodesAction';
+import { setSorted } from '../../redux/actions/sortedAction';
 import EpisodeCard from '../EpisodeCard';
 import styled from './EpisodeList.module.css'
 
-const EpisodeList = ({episodes, sortHandler, deleteEpisodesHandler, charactersCountHandler}) => {
+const EpisodeList = ({episodes}) => {
+  
+  const dispatch = useDispatch()
+
+  const sortHandler = (sort) => {
+    dispatch(setSorted(sort))
+    dispatch(setEpisode(sort))
+  }
 
   return ( 
     <div className={styled.container}>
@@ -22,8 +32,6 @@ const EpisodeList = ({episodes, sortHandler, deleteEpisodesHandler, charactersCo
       <EpisodeCard
         key={el.episode_id}
         episode={el}
-        deleteEpisodesHandler={deleteEpisodesHandler}
-        charactersCountHandler={charactersCountHandler}
       />)}
     </div>
     </div>

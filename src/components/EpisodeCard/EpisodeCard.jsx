@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { charactersCaunter, deleteEpisode } from '../../redux/actions/episodesAction';
 import styled from './EpisodeCard.module.css'
 
-const EpisodeCard = ({ episode, deleteEpisodesHandler, charactersCountHandler }) => {
+const EpisodeCard = ({ episode }) => {
   const [characters, setCharacters] = useState(0)
   const [text, setText] = useState('')
+  const { sorted } = useSelector(state => state)
+  const dispatch = useDispatch()
 
   // words - параметры массива:
   // В вариант1 попадают слова с окончаниями для:
@@ -29,14 +33,14 @@ const EpisodeCard = ({ episode, deleteEpisodesHandler, charactersCountHandler })
         <div className={styled.charactersFilter}>
           <button
             className={styled.charactersBtn}
-            onClick={() => charactersCountHandler('-', episode.episode_id)}
+            onClick={() => dispatch(charactersCaunter(episode.episode_id, '-', sorted) )}
           >
             -
           </button>
           <span>{characters}</span>
           <button
             className={styled.charactersBtn}
-            onClick={() => charactersCountHandler('+', episode.episode_id)}
+            onClick={() => dispatch(charactersCaunter(episode.episode_id, '+', sorted) )}
           >
             +
           </button>
@@ -45,7 +49,7 @@ const EpisodeCard = ({ episode, deleteEpisodesHandler, charactersCountHandler })
       </div>
       <button
         className={styled.deleteBtn}
-        onClick={() => deleteEpisodesHandler(episode.episode_id)}
+        onClick={() => dispatch( deleteEpisode(episode.episode_id))}
       >
         Удалить
       </button>
