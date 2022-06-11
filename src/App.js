@@ -31,12 +31,12 @@ function App() {
 
     if(sort === 'up') {
       sortEpisodes.sort((a, b) => {
-        return a.episode_id - b.episode_id
+        return a.characters.length - b.characters.length
       })
     }
     if(sort === 'down') {
         sortEpisodes.sort((a, b) => {
-        return b.episode_id - a.episode_id
+        return b.characters.length - a.characters.length
       })
     }
     setEpisodes(sortEpisodes)
@@ -44,6 +44,17 @@ function App() {
   const deleteEpisodesHandler = (id) => {
     setEpisodes(prev => {
       return episodes.filter(ep => ep.episode_id !== id)
+    })
+  }
+  const charactersCountHandler = (operator, episode_id) => {
+    setEpisodes(prev => {
+      const newEpisodes = JSON.parse(JSON.stringify(prev))
+      return newEpisodes.map(ep => {
+        if (ep.episode_id === episode_id) {
+          operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
+        }
+        return ep
+      })
     })
   }
   
@@ -73,6 +84,7 @@ function App() {
               sortHandler={sortHandler}
               episodes={episodes}
               deleteEpisodesHandler={deleteEpisodesHandler}
+              charactersCountHandler={charactersCountHandler}
             />
             :
             <button

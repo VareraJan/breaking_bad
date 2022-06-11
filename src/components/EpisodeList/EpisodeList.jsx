@@ -1,7 +1,7 @@
 import EpisodeCard from '../EpisodeCard';
 import styled from './EpisodeList.module.css'
 
-const EpisodeList = ({episodes, sortHandler, deleteEpisodesHandler}) => {
+const EpisodeList = ({episodes, sortHandler, deleteEpisodesHandler, charactersCountHandler}) => {
 
   return ( 
     <div className={styled.container}>
@@ -23,6 +23,7 @@ const EpisodeList = ({episodes, sortHandler, deleteEpisodesHandler}) => {
         key={el.episode_id}
         episode={el}
         deleteEpisodesHandler={deleteEpisodesHandler}
+        charactersCountHandler={charactersCountHandler}
       />)}
     </div>
     </div>
