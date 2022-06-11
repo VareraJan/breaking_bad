@@ -6,6 +6,7 @@ function App() {
   const [episodes, setEpisodes] = useState([])
   const [err, setErr] = useState({})
   const [loading, setLoading] = useState(false)
+  const [sorted, setSorted] = useState('')
 
   const getEpisodesHandler = () => {
     setLoading(true)
@@ -26,22 +27,30 @@ function App() {
     getEpisode()
   }
 
-  const sortHandler = (sort) => {
-    let sortEpisodes = JSON.parse(JSON.stringify(episodes));
-
-    if(sort === 'up') {
-      sortEpisodes.sort((a, b) => {
-        return a.characters.length - b.characters.length
-      })
-    }
-    if(sort === 'down') {
+  const sortedEpisode = (sort, eps) => {
+    if (sort) {
+      let sortEpisodes =  eps || JSON.parse(JSON.stringify(episodes));
+  
+      if(sort === 'up') {
         sortEpisodes.sort((a, b) => {
-        return b.characters.length - a.characters.length
-      })
+          return a.characters.length - b.characters.length
+        })
+      }
+      if(sort === 'down') {
+          sortEpisodes.sort((a, b) => {
+          return b.characters.length - a.characters.length
+        })
+      }
+      return sortEpisodes
     }
-    setEpisodes(sortEpisodes)
   }
+  const sortHandler = (sort, eps) => {
+    setSorted(sort)
+    setEpisodes(prev => sortedEpisode(sort, prev )) 
+  }
+
   const deleteEpisodesHandler = (id) => {
+    
     setEpisodes(prev => {
       return episodes.filter(ep => ep.episode_id !== id)
     })
@@ -49,15 +58,18 @@ function App() {
   const charactersCountHandler = (operator, episode_id) => {
     setEpisodes(prev => {
       const newEpisodes = JSON.parse(JSON.stringify(prev))
-      return newEpisodes.map(ep => {
-        if (ep.episode_id === episode_id) {
-          operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
-        }
-        return ep
-      })
-    })
-  }
+      return  sortedEpisode(
+        sorted,
+        newEpisodes.map(ep => {
+          if (ep.episode_id === episode_id) {
+            operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
+          }
+          return ep
   
+        })
+      ) 
+    })
+  }  
 
   if (loading) {
     return (
