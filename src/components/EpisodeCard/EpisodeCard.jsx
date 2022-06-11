@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from './EpisodeCard.module.css'
 
-const EpisodeCard = ({ episode }) => {
+const EpisodeCard = ({ episode, deleteEpisodesHandler }) => {
   const [characters, setCharacters] = useState(0)
   const [text, setText] = useState('')
 
@@ -9,7 +9,7 @@ const EpisodeCard = ({ episode }) => {
     setCharacters(episode.characters.length)
     setText('Персонаж')
   }, [episode])
-  console.log('Card', episode);
+  // console.log('Card');
   return ( 
     <div  className={styled.card}>
       <div className={styled.cardContext}>
@@ -21,7 +21,12 @@ const EpisodeCard = ({ episode }) => {
           <span>{text}</span>
         </div>
       </div>
-      <button className={styled.deleteBtn}>Удалить</button>
+      <button
+        className={styled.deleteBtn}
+        onClick={() => deleteEpisodesHandler(episode.episode_id)}
+      >
+        Удалить
+      </button>
     </div>
    );
 }
