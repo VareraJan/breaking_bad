@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import styled from'./App.module.css';
 import EpisodeList from './components/EpisodeList';
 import { setError, setLoading } from './redux/actions/loadingAction';
 import { getEpisodeThunk } from './redux/thunk/episodesThunk';
+import styled from 'styled-components'
 
 function App() {
   const episodes = useSelector((store) => store.episodes)
@@ -18,19 +18,19 @@ function App() {
 
   if (loading) {
     return (
-      <div className={styled.container}>
+      <Container>
       <div>
         <h1>Список эпизодов Breaking Bad</h1>
         <span>LOADING...</span>
       </div>
-    </div>
+    </Container>
     )
   }
 
   return (
-    <div className={styled.container}>
+    <Container>
       <div>
-        <h1>Список эпизодов Breaking Bad</h1>
+        <H1>Список эпизодов Breaking Bad</H1>
         {error?.message 
           ?
           <h3>{error.message}</h3>
@@ -41,16 +41,35 @@ function App() {
               episodes={episodes}
             />
             :
-            <button
-              className={styled.button}
+            <Button
               onClick={getEpisodesHandler}
             >
               Загрузить эпизоды
-            </button>
+            </Button>
         }
       </div>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+`
+const Button = styled.button`
+background: rgba(5, 9, 238, 0.9);
+color: rgba(255, 255, 255, 0.9);
+font-size: calc(var(--index)*1.7);
+height: 2.2em;
+width: 12em;
+border-radius: 0.5em;
+border: none;
+cursor: pointer;
+`
+const H1 = styled.h1`
+font-size: calc(var(--index)*3);
+`
 
 export default App;

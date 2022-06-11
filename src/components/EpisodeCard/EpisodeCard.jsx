@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { charactersCaunter, deleteEpisode } from '../../redux/actions/episodesAction';
-import styled from './EpisodeCard.module.css'
+import styled from 'styled-components'
 
 const EpisodeCard = ({ episode }) => {
   const [characters, setCharacters] = useState(0)
@@ -27,34 +27,68 @@ const EpisodeCard = ({ episode }) => {
     setText(sklonenie(episode.characters.length, ['Персонаж', 'Персонажа', 'Персонажей']))
   }, [episode])
   return ( 
-    <div  className={styled.card}>
-      <div className={styled.cardContext}>
-        <h2>Эпизод № {episode.episode_id}</h2>
-        <div className={styled.charactersFilter}>
-          <button
-            className={styled.charactersBtn}
+    <Card>
+      <CardContext>
+        <H2>Эпизод № {episode.episode_id}</H2>
+        <CharactersFilter>
+          <Button
             onClick={() => dispatch(charactersCaunter(episode.episode_id, '-', sorted) )}
           >
             -
-          </button>
-          <span>{characters}</span>
-          <button
-            className={styled.charactersBtn}
+          </Button>
+          <Span>{characters}</Span>
+          <Button
             onClick={() => dispatch(charactersCaunter(episode.episode_id, '+', sorted) )}
           >
             +
-          </button>
-          <span>{text}</span>
-        </div>
-      </div>
-      <button
-        className={styled.deleteBtn}
+          </Button>
+          <Span>{text}</Span>
+        </CharactersFilter>
+      </CardContext>
+      <Button
+        bgc='tomato'
+        height='3em'
+        width='6em'
         onClick={() => dispatch( deleteEpisode(episode.episode_id))}
       >
         Удалить
-      </button>
-    </div>
+      </Button>
+    </Card>
    );
 }
- 
+
+const Card = styled.div`
+border-bottom: 1px solid grey;
+display: flex;
+justify-content: space-around;
+align-items: center;
+`
+const H2 = styled.h2`
+font-size: calc(var(--index)*2.5);
+`
+const CardContext = styled.div`
+display: flex;
+flex-direction: column;
+margin-bottom: .5em;
+`
+const CharactersFilter = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+`
+const Button = styled.button`
+background: ${props => props.bgc || 'rgba(5, 9, 238, 0.9)'};
+color: rgba(255, 255, 255, 0.9);
+font-size: calc(var(--index)*1.7);
+height: ${props => props.height || '1.7em' };
+width: ${props => props.width || '2em' };
+border-radius: 0.5em;
+border: none;
+cursor: pointer;
+`
+const Span = styled.span`
+margin: 0.5em;
+font-size: calc(var(--index)*1.7);
+`
+
 export default EpisodeCard;
