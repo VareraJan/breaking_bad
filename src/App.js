@@ -1,16 +1,20 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from'./App.module.css';
 import EpisodeList from './components/EpisodeList';
+import { getEpisodeThunk } from './redux/thunk/episodesThunk';
 
 function App() {
   const [episodes, setEpisodes] = useState([])
   const [err, setErr] = useState({})
   const [loading, setLoading] = useState(false)
 
+  const dispatch = useDispatch()
+
   const getEpisodesHandler = () => {
     setLoading(true)
     setErr({})
-
+    dispatch(getEpisodeThunk())
     const getEpisode = async () => {
       const response = await fetch(process.env.REACT_APP_API_BREAKING_BAD)
       const data = await response.json()
