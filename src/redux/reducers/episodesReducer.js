@@ -36,15 +36,24 @@ const episodesReducer = (state = initState, action) => {
     
     case CHARACTERS_COUNTER:
       const {episode_id, operator, sorted} = payload;
-      return  sortedEpisode(
-        sorted,
-        state.map(ep => {
+      if (sorted) {
+        return  sortedEpisode(
+          sorted,
+          state.map(ep => {
+            if (ep.episode_id === episode_id) {
+              operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
+            }
+            return ep
+          })
+        ) 
+      } else {
+        return JSON.parse(JSON.stringify(state)).map(ep => {
           if (ep.episode_id === episode_id) {
             operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
           }
           return ep
         })
-      ) 
+      }
     default: 
       return state
   }
