@@ -58,16 +58,24 @@ function App() {
   const charactersCountHandler = (operator, episode_id) => {
     setEpisodes(prev => {
       const newEpisodes = JSON.parse(JSON.stringify(prev))
-      return  sortedEpisode(
-        sorted,
-        newEpisodes.map(ep => {
+      if (sorted) {
+        return  sortedEpisode(
+          sorted,
+          newEpisodes.map(ep => {
+            if (ep.episode_id === episode_id) {
+              operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
+            }
+            return ep
+          })
+        ) 
+      } else {
+        return newEpisodes.map(ep => {
           if (ep.episode_id === episode_id) {
             operator === '+' ?  ep.characters.push('_') : ep.characters.pop()
           }
           return ep
-  
         })
-      ) 
+      }
     })
   }  
 
